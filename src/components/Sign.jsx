@@ -5,24 +5,27 @@ function Sign() {
     const [password, setPassword] = useState("");
     const [responseType, setResponseType] = useState(null);
     const [responseData, setResponseData] = useState(null);
+    
+    const buttonClassName = "border-1 bg-slate-900 text-white border-slate-400 rounded-lg px-4 py-1 hover:bg-white hover:text-slate-900 hover:cursor-pointer transition-all duration-600";
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(userName, password);
+        const response = await fetch("http://localhost:3000/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const result = await response.json();
+        setResponseType(response.status);
+        setResponseData(result);
+    };
 
     return(
         <div className="flex justify-center mt-8" >
             <form   action="http://localhost:3000/login"
-                    onSubmit={async (e) => {
-                        e.preventDefault();
-                        console.log(userName, password);
-                        const response = await fetch("http://localhost:3000/users", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({ username: userName, password }),
-                        });
-                        const result = await response.json();
-                        setResponseType(response.status);
-                        setResponseData(result);
-                    }}
+                    onSubmit={handleSubmit}
                     method="POST" 
                     className="flex flex-col items-center md:w-[40%]">
                 {responseType && (
@@ -61,12 +64,8 @@ function Sign() {
                     />
                 </div>
                 <div className="mt-10 flex w-[100%] justify-center gap-4">
-                    <button className="border-1 bg-slate-900 text-white border-slate-400 
-                                        rounded-lg px-4 py-1 hover:bg-white hover:text-slate-900 
-                                        hover:cursor-pointer transition-all duration-600" type="submit">Sign In</button>
-                    <button className="border-1 bg-slate-900 text-white border-slate-400 
-                                        rounded-lg px-4 py-1 hover:bg-white hover:text-slate-900 
-                                        hover:cursor-pointer transition-all duration-600" type="submit">Back To Posts</button>
+                    <button className={buttonClassName} type="submit">Sign In</button>
+                    <button className={buttonClassName} type="submit">Back To Posts</button>
                 </div>
             </form>
         </div>
