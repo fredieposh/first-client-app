@@ -1,12 +1,19 @@
 import { useState } from "react"
+import { useNavigate } from "react-router"
 
 function Sign() {
+    const navigate = useNavigate();
     const [userName, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [responseType, setResponseType] = useState(null);
     const [responseData, setResponseData] = useState(null);
     
     const buttonClassName = "border-1 bg-slate-900 text-white border-slate-400 rounded-lg px-4 py-1 hover:bg-white hover:text-slate-900 hover:cursor-pointer transition-all duration-600";
+    
+    const handleButtonClick = (event, route) => {
+        event.preventDefault();
+        navigate(route);
+    };
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -65,7 +72,7 @@ function Sign() {
                 </div>
                 <div className="mt-10 flex w-[100%] justify-center gap-4">
                     <button className={buttonClassName} type="submit">Sign In</button>
-                    <button className={buttonClassName} type="submit">Back To Posts</button>
+                    <button className={buttonClassName} type="button" onClick={(e) => handleButtonClick(e, "/")}>Back To Posts</button>
                 </div>
             </form>
         </div>
