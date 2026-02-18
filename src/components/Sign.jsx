@@ -44,7 +44,7 @@ function Sign() {
                             })}
                         </ul>
                     </div> :
-                    <div>Not Error </div>
+                    navigate("/", {state: {message: "Sign up successful!"}})
                 )}
                 <div className="flex justify-center w-full"><h3 className="font-bold text-2xl text-center" >Sign Up</h3></div>
                 <div className="mt-10 flex w-[100%]  justify-center">
