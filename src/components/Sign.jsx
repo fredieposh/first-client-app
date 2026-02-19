@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
+import { handleButtonClick, handleSubmit } from "../utils.jsx"
 
 function Sign() {
     const navigate = useNavigate();
@@ -9,30 +10,11 @@ function Sign() {
     const [responseData, setResponseData] = useState(null);
     
     const buttonClassName = "border-1 bg-slate-900 text-white border-slate-400 rounded-lg px-4 py-1 hover:bg-white hover:text-slate-900 hover:cursor-pointer transition-all duration-600";
-    
-    const handleButtonClick = (event, route) => {
-        event.preventDefault();
-        navigate(route);
-    };
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(userName, password);
-        const response = await fetch("http://localhost:3000/users", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        const result = await response.json();
-        setResponseType(response.status);
-        setResponseData(result);
-    };
 
     return(
         <div className="flex justify-center mt-8" >
             <form   action="http://localhost:3000/login"
-                    onSubmit={handleSubmit}
+                    onSubmit={(e) => handleSubmit(e, "http://localhost:3000/users", { userName, password, setResponseType, setResponseData, includeBody: false })}
                     method="POST" 
                     className="flex flex-col items-center md:w-[40%]">
                 {responseType && (
@@ -71,8 +53,15 @@ function Sign() {
                     />
                 </div>
                 <div className="mt-10 flex w-[100%] justify-center gap-4">
-                    <button className={buttonClassName} type="submit">Sign In</button>
-                    <button className={buttonClassName} type="button" onClick={(e) => handleButtonClick(e, "/")}>Back To Posts</button>
+                    <button 
+                        className={buttonClassName} 
+                        type="submit">Sign Up
+                    </button>
+                    <button 
+                    className={buttonClassName} 
+                    type="button" 
+                    onClick={(e) => handleButtonClick(e, "/", navigate)}>Back To Posts
+                    </button>
                 </div>
             </form>
         </div>
@@ -87,4 +76,5 @@ function Error({ error }) {
     )
 };
 
+export  { Error };
 export default Sign;
