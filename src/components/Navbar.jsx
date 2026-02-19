@@ -10,10 +10,10 @@ function Navbar({ isAuth }) {
                         <span className="hover:bg-white-900">Profile</span>
                         <span className="hover:bg-white-900">Log Out</span>                        
                     </>:
-                    <>
-                        <span className="px-4 py-2 hover:bg-white rounded-lg hover:text-slate-900 hover:cursor-pointer hover:scale-110 transition-all duration-600">Log In</span>
-                        <Link to="/sign" className="px-4 py-2 hover:bg-white rounded-lg hover:text-slate-900 hover:cursor-pointer hover:scale-110 transition-all duration-600">Sign Up</Link>
-                    </>
+                    <div>
+                        <Link to="/login" className="px-4 py-2 hover:bg-white rounded-lg hover:text-slate-900 hover:cursor-pointer hover:scale-110 transition-all duration-600">Log In</Link>
+                        <Link to="/sign"  className="px-4 py-2 hover:bg-white rounded-lg hover:text-slate-900 hover:cursor-pointer hover:scale-110 transition-all duration-600">Sign Up</Link>
+                    </div>
                 }
             </div>
         </div>
