@@ -13,9 +13,10 @@ function Login() {
     const buttonClassName = "border-1 bg-slate-900 text-white border-slate-400 rounded-lg px-4 py-1 hover:bg-white hover:text-slate-900 hover:cursor-pointer transition-all duration-600";
     useEffect(() => {
         if (responseData && responseType == 200) {
-            navigate("/", {state: { message: "Login successful!", data: responseData }});
+            localStorage.setItem("token", responseData[0]);
+            navigate("/", {state: { message: "Login successful!" }});
         }
-    }, [navigate, responseData, responseType]);
+    }, [responseData, responseType]);
     return(
         <div className="flex justify-center mt-8" >
             <form   action="http://localhost:3000/login"
