@@ -13,7 +13,7 @@ function Posts(){
             if ( result.isAuth ) { setIsAuth(true) };
             if ( result.posts ) { setPosts(result.posts) };
             
-            console.log(`posts: ${JSON.stringify(result.posts)}`);
+            // console.log(`posts: ${JSON.stringify(result.posts)}`);
         };
 
         fetchData();
