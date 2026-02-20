@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
-import { Outlet, useLocation } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 import Navbar from './components/Navbar.jsx'
-import { handleResponse } from './utils.jsx'
+import { handleResponse, handleLogout } from './utils.jsx'
 
 
 function App() {
   const [user, setUser] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const onLogout = () => handleLogout({ setUser, setIsAuth, navigate });
 
   useEffect(() => {
     async function fetchData() {
@@ -26,7 +28,7 @@ function App() {
 
   return (
     <div className='bg-slate-50 min-h-screen text-slate-900'>
-      <Navbar isAuth={ isAuth }></Navbar>
+      <Navbar isAuth={isAuth} onLogout={onLogout} />
       <Outlet />
     </div>
   )
