@@ -1,17 +1,5 @@
 import { useState, useEffect } from "react";
-
-function convertMessagesTimeFormat (post) {
-        const rawDate = new Date(post?.createdAt);
-        const formattedDate = new Intl.DateTimeFormat('en-GB', {
-            hour: '2-digit',
-            minute: '2-digit',
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour12: false
-        }).format(rawDate).replace(',', '');
-        return formattedDate;
-};
+import { convertMessagesTimeFormat } from "../utils";
 
 function Posts(){
     const [posts, setPosts] = useState(null);
