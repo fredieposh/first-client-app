@@ -1,5 +1,5 @@
 import { Error } from "./Sign";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { handleButtonClick, handleSubmit } from "../utils.jsx";
 
@@ -11,24 +11,26 @@ function Login() {
     const [responseData, setResponseData] = useState(null);
     
     const buttonClassName = "border-1 bg-slate-900 text-white border-slate-400 rounded-lg px-4 py-1 hover:bg-white hover:text-slate-900 hover:cursor-pointer transition-all duration-600";
-
+    useEffect(() => {
+        if (responseData && responseType == 200) {
+            navigate("/", {state: { message: "Login successful!", data: responseData }});
+        }
+    }, [navigate, responseData, responseType]);
     return(
         <div className="flex justify-center mt-8" >
             <form   action="http://localhost:3000/login"
                     onSubmit={(e) => handleSubmit(e, "http://localhost:3000/login", { userName, password, setResponseType, setResponseData })}
                     method="POST" 
                     className="flex flex-col items-center md:w-[40%]">
-                {responseType && (
-                    responseType >= 400 ?
+                {responseData &&  responseType >= 400 && (
                     <div className="mb-6">
                         <ul className="flex flex-col gap-2 items-center">
                             {responseData.map((error, index) => {
                                 return <li key={index} className="bg-red-200 text-red-800 px-3 py-1 rounded-lg"><Error error={error}/></li>
                             })}
                         </ul>
-                    </div> :
-                    navigate("/", {state: {message: "Login successful!"}})
-                )}
+                    </div> 
+                )}  
                 <div className="flex justify-center w-full"><h3 className="font-bold text-2xl text-center" >Login</h3></div>
                 <div className="mt-10 flex w-[100%]  justify-center">
                     <label className="w-35" htmlFor="username">Enter Username:</label>

@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react'
-import { Outlet } from 'react-router'
+import { Outlet, useLocation } from 'react-router'
 import Navbar from './components/Navbar.jsx'
-import Posts from './components/Posts.jsx'
-import Sign from './components/Sign.jsx';
+
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
+  const location = useLocation();
 
+  console.log(location.state);
   useEffect(() => {
     async function fetchData() {
       const response = await fetch("http://localhost:3000/users");
       const result = await response.json();
 
       console.log(result);
-      if (result.isAuth) {
+      if (result.isAuth && !isAuth) {
         setIsAuth(true);
       };
     };
