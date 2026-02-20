@@ -35,4 +35,20 @@ function convertMessagesTimeFormat(post) {
     return formattedDate;
 }
 
-export { handleButtonClick, handleSubmit, convertMessagesTimeFormat };
+function handleResponse({ result, setIsAuth, setUser, user, isAuth }) {
+    if (result.isAuth && !isAuth) {
+        setIsAuth(true);
+    }
+    if (result.user && !user) {
+        setUser(result.user);
+    }
+
+    if (!result.isAuth && isAuth) {
+        setIsAuth(false);
+        setUser(null);
+        localStorage.removeItem("token");
+    }
+
+};
+
+export { handleButtonClick, handleSubmit, convertMessagesTimeFormat, handleResponse };
