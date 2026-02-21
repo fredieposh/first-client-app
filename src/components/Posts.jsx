@@ -1,18 +1,17 @@
 import { useState, useEffect } from "react";
 import { convertMessagesTimeFormat } from "../utils";
-import { Link, useParams } from "react-router";
+import { Link, useParams, useOutletContext } from "react-router";
 
 function Posts(){
     const [posts, setPosts] = useState(null);
-    const [isAuth, setIsAuth] = useState(false);
     const { id } = useParams();
+    const { user, isAuth } = useOutletContext();
 
     useEffect(() => {
         async function fetchData() {
             const response = id ? await fetch(`http://localhost:3000/posts/${id}`) : await fetch("http://localhost:3000/posts");
             const result = await response.json();
 
-            if ( result.isAuth ) { setIsAuth(true) };
             if ( result.posts ) { setPosts(result.posts) };
             
             // console.log(`posts: ${JSON.stringify(result.posts)}`);

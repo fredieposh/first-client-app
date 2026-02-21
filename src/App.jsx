@@ -30,7 +30,7 @@ function App() {
     <div className='bg-slate-50 h-screen text-slate-900 flex flex-col overflow-hidden'>
       <Navbar isAuth={isAuth} onLogout={onLogout} />
       <main className="flex-1 min-h-0 overflow-auto">
-        <Outlet />
+        <Outlet context={{ user, isAuth }} />
       </main>
     </div>
   )
