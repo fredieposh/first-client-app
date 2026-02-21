@@ -27,9 +27,11 @@ function App() {
   }, [location.pathname])
 
   return (
-    <div className='bg-slate-50 min-h-screen text-slate-900'>
+    <div className='bg-slate-50 h-screen text-slate-900 flex flex-col overflow-hidden'>
       <Navbar isAuth={isAuth} onLogout={onLogout} />
-      <Outlet />
+      <main className="flex-1 min-h-0 overflow-auto">
+        <Outlet />
+      </main>
     </div>
   )
 };
