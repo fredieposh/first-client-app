@@ -13,6 +13,7 @@ const routes = [
         {index: true, element: <Posts />},
         {path: "/sign", element: <Sign />},
         {path: "/login", element: <Login />},
+        {path: "/post/:id", element: <Posts />},
       ]
     },
   ];
