@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { convertMessagesTimeFormat } from "../utils";
+import { Link } from "react-router";
 
 function Posts(){
     const [posts, setPosts] = useState(null);
@@ -55,7 +56,7 @@ function Card({
 
     return (
         <div className="flex flex-col items-left gap-3 border-1 border-slate-400 bg-slate-100 rounded-lg p-4 w-[90%] md:w-[60%] ">
-            <div className="font-bold text-xl">{postTitle}</div>
+            <div className="font-bold text-xl hover:underline"><Link to={`/post/${id}`}>{postTitle}</Link></div>
             <div className="mt-3 relative max-h-[14rem] overflow-hidden">
                 <div className="whitespace-pre-wrap">{postContent}</div>
                 <div 
