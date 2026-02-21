@@ -56,7 +56,13 @@ function Card({
     return (
         <div className="flex flex-col items-left gap-3 border-1 border-slate-400 bg-slate-100 rounded-lg p-4 w-[90%] md:w-[60%] ">
             <div className="font-bold text-xl">{postTitle}</div>
-            <div className="mt-3 whitespace-pre-wrap">{postContent}</div>
+            <div className="mt-3 relative max-h-[14rem] overflow-hidden">
+                <div className="whitespace-pre-wrap">{postContent}</div>
+                <div 
+                    className="absolute bottom-0 left-0 right-0 h-12 pointer-events-none bg-gradient-to-t from-slate-100 to-transparent" 
+                    aria-hidden="true"
+                />
+            </div>
             <div className="flex justify-end gap-4 text-sm mt-6" >
                 <div><span className="font-bold">Posted on:</span> {createdAt}</div>
                 <div><span className="font-bold">Post Comments:</span> {comments.length}</div>
