@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
 import { convertMessagesTimeFormat } from "../utils";
 import { Link, useParams, useOutletContext } from "react-router";
+import { Editor } from "@tinymce/tinymce-react";
 
 function Posts(){
     const [posts, setPosts] = useState(null);
+    const [showCommentEditor, setShowCommentEditor] = useState(false);
     const { id } = useParams();
-    const { user, isAuth } = useOutletContext();
+    const { user, isAuth } = useOutletContext(); 
+
+    const toggleCommentEditor = () => {
+        setShowCommentEditor(!showCommentEditor);
+    };
 
     useEffect(() => {
         async function fetchData() {
@@ -36,6 +42,9 @@ function Posts(){
                             isPublished={post.isPublished}
                             comments={post.comments}
                             isFull={id ? true : false}
+                            isAuth={isAuth}
+                            toggleCommentEditor={toggleCommentEditor}
+                            showCommentEditor={showCommentEditor}
                         />):                    
                         <div>No posts to display</div>
                 ):
@@ -51,12 +60,15 @@ function Card({
     postTitle, 
     postContent, 
     createdAt, 
-    isPublished, 
+    isPublished,
     comments,
-    isFull = false
+    isAuth = false,
+    isFull = false,
+    toggleCommentEditor,
+    showCommentEditor
 }) {
     const [showComments, setShowComments] = useState(false);
-    console.log(comments);
+    console.log(showCommentEditor);
     return (
         <div className={`flex flex-col items-left gap-3 border-1 border-slate-400 bg-slate-100 rounded-lg p-4 w-[90%] md:w-[60%] ${isFull ? 'mb-3': ''}`}>
             <div className="font-bold text-xl hover:underline"><Link to={`/post/${id}`}>{postTitle}</Link></div>
@@ -72,6 +84,7 @@ function Card({
             <div className="flex justify-end gap-4 text-sm mt-6" >
                 <div><span className="font-bold">Posted on:</span> {createdAt}</div>
                 <div><span className={`font-bold ${comments.length > 0 ? 'hover:cursor-pointer hover:underline' : ''}`} onClick={() => setShowComments(!showComments)}>Post Comments:</span> {comments.length}</div>
+                {isFull && isAuth && <div><span className="font-bold hover:cursor-pointer hover:underline" onClick={toggleCommentEditor}>Add Comment</span></div>}
             </div>
             {showComments && (
                 <>
@@ -86,6 +99,9 @@ function Card({
                 </div>
                 </>
             )}
+            {isAuth && showCommentEditor && (
+                <CommentEditor />
+            )}
         </div>
     )
 }
@@ -98,5 +114,32 @@ function Comment({ commentContent, createdAt }) {
         </div>        
     )
 };
+
+function CommentEditor({}) {
+    return (
+        <>
+      <Editor
+        apiKey={import.meta.env.VITE_TINYMCE_API_URL}
+        // onInit={ (_evt, editor) => editorRef.current = editor }
+        // initialValue="<p>This is the initial content of the editor.</p>"
+        init={{
+          height: 500,
+          menubar: false,
+          plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'preview', 'help', 'wordcount',
+          ],
+          placeholder: 'Add a comment...',
+          toolbar: 'undo redo | blocks | ' +
+            'bold italic forecolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        }}
+      />
+        </>
+    )
+}
 
 export default Posts;
