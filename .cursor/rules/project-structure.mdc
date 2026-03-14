@@ -1,0 +1,44 @@
+---
+description: File and folder structure conventions for this React project
+alwaysApply: true
+---
+
+# Project Structure
+
+## Directory layout
+
+```
+project-root/
+├── index.html
+├── vite.config.js
+├── eslint.config.js
+├── package.json
+└── src/
+    ├── main.jsx          # Entry point — mounts router
+    ├── App.jsx           # Root layout component
+    ├── routes.jsx        # Route definitions array
+    ├── utils.jsx         # Shared utility functions
+    ├── index.css         # Global styles (Tailwind import)
+    └── components/       # All page and UI components
+        ├── Navbar.jsx
+        ├── ErrorPage.jsx
+        └── ...
+```
+
+## File naming
+
+| Type | Convention | Example |
+|------|-----------|---------|
+| React components | PascalCase `.jsx` | `LoginPage.jsx`, `Navbar.jsx` |
+| Utilities / config | camelCase `.jsx` or `.js` | `utils.jsx`, `routes.jsx` |
+| CSS | kebab-case `.css` | `index.css` |
+| Build configs | kebab-case `.js` | `vite.config.js` |
+
+## Key conventions
+
+- Use `.jsx` for all React files (no TypeScript)
+- `src/components/` holds all page-level and shared UI components
+- Utility functions shared across components live in `src/utils.jsx`
+- Route config lives in `src/routes.jsx`, imported once in `main.jsx`
+- `src/App.jsx` is the root layout only — it renders `<Navbar>` and `<Outlet>`, manages global auth state
+- Keep `src/` flat except for the `components/` subdirectory

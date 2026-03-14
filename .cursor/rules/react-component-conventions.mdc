@@ -1,0 +1,69 @@
+---
+description: React component coding conventions for this project
+globs: **/*.jsx
+alwaysApply: false
+---
+
+# React Component Conventions
+
+## Function declarations, not arrow functions
+
+```jsx
+// ✅ GOOD
+function MyComponent({ title, onAction }) { ... }
+
+// ❌ BAD
+const MyComponent = ({ title, onAction }) => { ... }
+```
+
+## Destructure props with defaults in the signature
+
+```jsx
+// ✅ GOOD
+function Card({ id, title, isAuth = false, userId = null }) { ... }
+
+// ❌ BAD
+function Card(props) { const { id } = props; }
+```
+
+## Exports
+
+- **Default export** for the main/page component of each file
+- **Named export** for secondary helper components defined in the same file
+
+```jsx
+// ✅ GOOD — secondary component
+function ErrorMessage({ msg }) { return <>{msg}</> }
+export { ErrorMessage };
+
+// ✅ GOOD — main component at the bottom
+export default MyPage;
+```
+
+## Co-locate sub-components in the same file
+
+Related presentational sub-components (e.g., a `Card`, `ListItem`, or inline error display) can live in the same file as the parent that uses them. Extract to a separate file only when reused across multiple files.
+
+## Hooks to use
+
+Use React and react-router hooks directly; do not wrap them unnecessarily:
+
+- `useState`, `useEffect`, `useRef` — React core
+- `useParams`, `useNavigate`, `useLocation`, `useOutletContext` — react-router
+- `useRouteError` — in error boundary components
+
+## Conditional rendering
+
+Use ternary operators inline in JSX:
+
+```jsx
+// ✅ GOOD
+{isAuth ? <LogoutButton /> : <LoginLink />}
+
+// ✅ GOOD — short-circuit for optional elements
+{isAuth && showEditor && <CommentEditor />}
+```
+
+## Functional components only
+
+Never use class components.

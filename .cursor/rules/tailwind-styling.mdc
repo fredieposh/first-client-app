@@ -1,0 +1,76 @@
+---
+description: Tailwind CSS styling conventions for this project
+globs: **/*.jsx
+alwaysApply: false
+---
+
+# Tailwind CSS Styling Conventions
+
+## Tailwind is the only styling method
+
+Use Tailwind utility classes exclusively. Do not use CSS modules, styled-components, or inline `style` props.
+
+## Color palette
+
+Use the **slate** scale as the base:
+
+| Use | Class |
+|-----|-------|
+| Page background | `bg-slate-50` |
+| Primary text | `text-slate-900` |
+| Dark sections (navbar, buttons) | `bg-slate-900` |
+| Cards / panels | `bg-slate-100` |
+| Borders | `border-slate-400` |
+| Muted text | `text-slate-500` |
+
+## Layout
+
+Full-height page layout with a sticky header and scrollable body:
+
+```jsx
+// Root wrapper
+<div className="bg-slate-50 h-screen text-slate-900 flex flex-col overflow-hidden">
+  <Navbar />
+  <main className="flex-1 min-h-0 overflow-auto">
+    <Outlet />
+  </main>
+</div>
+```
+
+Centering and constrained-width content:
+
+```jsx
+<div className="flex justify-center mt-8">
+  <div className="w-[90%] md:w-[60%]"> ... </div>
+</div>
+```
+
+## Reusable class strings
+
+Store repeated class strings in a `const` at the top of the component:
+
+```jsx
+// ✅ GOOD
+const buttonClassName = "border-1 bg-slate-900 text-white border-slate-400 rounded-lg px-4 py-1 hover:bg-white hover:text-slate-900 hover:cursor-pointer transition-all duration-600";
+
+<button className={buttonClassName}>Submit</button>
+<button className={buttonClassName}>Cancel</button>
+```
+
+## Interactive states
+
+```
+hover:cursor-pointer    — clickable non-button elements
+hover:underline         — link-like text
+hover:bg-*              — background change on hover
+hover:scale-110         — subtle scale on hover
+transition-all duration-300  — smooth transitions
+```
+
+## Dynamic classes
+
+Use template literals for conditional classes:
+
+```jsx
+<div className={`flex flex-col ${isFull ? 'mb-3' : ''}`}>
+```
