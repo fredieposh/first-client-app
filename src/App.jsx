@@ -12,6 +12,15 @@ function App() {
   const onLogout = () => handleLogout({ setUser, setIsAuth, navigate });
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('logout') === 'true') {
+      localStorage.removeItem('token');
+      setIsAuth(false);
+      setUser(null);
+      window.history.replaceState({}, '', '/');
+      return;
+    }
+
     async function fetchData() {
       const response = await fetch("http://localhost:3000/users", {
         headers: {
@@ -29,7 +38,7 @@ function App() {
 
   return (
     <div className='bg-slate-50 h-screen text-slate-900 flex flex-col overflow-hidden'>
-      <Navbar isAuth={isAuth} onLogout={onLogout} />
+      <Navbar isAuth={isAuth} onLogout={onLogout} user={user} />
       <main className="flex-1 min-h-0 overflow-auto">
         <Outlet context={{ user, isAuth }} />
       </main>
