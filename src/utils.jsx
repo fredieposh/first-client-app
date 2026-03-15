@@ -10,6 +10,7 @@ async function handleSubmit(e, apiRoute, { userName, password, setResponseType, 
         headers: {
             "Content-Type": "application/json",
         },
+        credentials: 'include',
     };
     if (includeBody) {
         fetchOptions.body = JSON.stringify({ username: userName, password });
@@ -35,10 +36,17 @@ function convertMessagesTimeFormat(post) {
     return formattedDate;
 }
 
-function handleLogout({ setUser, setIsAuth, navigate }) {
+async function handleLogout({ setUser, setIsAuth, navigate }) {
     setUser(null);
     setIsAuth(false);
     localStorage.removeItem("token");
+    
+    const logoutResult = await fetch('http://localhost:3000/logout', { 
+        method: 'POST',
+        credentials: 'include',
+    });
+
+    console.log(`${logoutResult}`);
     navigate("/");
 }
 

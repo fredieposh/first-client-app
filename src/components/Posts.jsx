@@ -17,7 +17,9 @@ function Posts(){
 
     useEffect(() => {
         async function fetchData() {
-            const response = id ? await fetch(`http://localhost:3000/posts/${id}`) : await fetch("http://localhost:3000/posts");
+            const response = id ? 
+                await fetch(`http://localhost:3000/posts/${id}`, {credentials: 'include'}) :
+                await fetch("http://localhost:3000/posts", { credentials: 'include'});
             const result = await response.json();
 
             if ( result.posts ) { setPosts(result.posts) };
@@ -143,6 +145,7 @@ function CommentEditor({ postId, userId, setShowCommentEditor }) {
                     "authorization": `Bearer ${localStorage?.token}`
                 },
                 body: JSON.stringify({ comment }),
+                credentials: 'include',
             });
             const result = await response.json();
             console.log(`comment posted: ${JSON.stringify(result)}`);

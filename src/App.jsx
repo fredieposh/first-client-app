@@ -18,6 +18,7 @@ function App() {
           "Content-Type": "application/json",
           "authorization": `Bearer ${localStorage?.token}`
         },
+        credentials:  'include',
       });
       const result = await response.json();
       handleResponse({result, setIsAuth, setUser, user, isAuth});
