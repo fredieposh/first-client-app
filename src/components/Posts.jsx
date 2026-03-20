@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { convertMessagesTimeFormat } from "../utils";
+import { convertMessagesTimeFormat, isContentJson } from "../utils";
+import { generateHTML } from "@tiptap/html";
+import StarterKit from "@tiptap/starter-kit";
 import { Link, useParams, useOutletContext } from "react-router";
 import { Editor } from "@tinymce/tinymce-react";
 import DOMPurify from "dompurify";
@@ -84,7 +86,14 @@ function Card({
         <div className={`flex flex-col items-left gap-3 border-1 border-slate-400 bg-slate-100 rounded-lg p-4 w-[90%] md:w-[60%] ${isFull ? 'mb-3': ''}`}>
             <div className="font-bold text-xl hover:underline"><Link to={`/post/${id}`}>{postTitle}</Link></div>
             <div className={`mt-3 relative ${!isFull ? 'max-h-[14rem] overflow-hidden' : ''}`}>
-                <div className="whitespace-pre-wrap">{postContent}</div>
+                {(() => {
+                    const parsed = isContentJson(postContent);
+                    if (parsed) {
+                        const html = DOMPurify.sanitize(generateHTML(parsed, [StarterKit]));
+                        return <div dangerouslySetInnerHTML={{ __html: html }} />;
+                    }
+                    return <div className="whitespace-pre-wrap">{postContent}</div>;
+                })()}
                 {!isFull && (
                 <div 
                     className="absolute bottom-0 left-0 right-0 h-12 pointer-events-none bg-gradient-to-t from-slate-100 to-transparent" 

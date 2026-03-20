@@ -66,4 +66,13 @@ function handleResponse({ result, setIsAuth, setUser, user, isAuth }) {
 
 };
 
-export { handleButtonClick, handleSubmit, convertMessagesTimeFormat, handleResponse, handleLogout };
+function isContentJson(content) {
+    try {
+        const parsed = JSON.parse(content);
+        if (parsed?.type === "doc") return parsed;
+    } catch {
+        return false;
+    }
+}
+
+export { handleButtonClick, handleSubmit, convertMessagesTimeFormat, handleResponse, handleLogout, isContentJson };

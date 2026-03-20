@@ -9,7 +9,7 @@ function Navbar({ isAuth, onLogout, user }) {
             <div className="flex gap-3 text-md">
                 {isAuth ?
                     <>
-                        <Link to={`http://localhost:5174/users/${user.id}/home`} className={linkStyle}>Profile</Link>
+                        <Link to={`http://localhost:5174/users/${user.id}/posts`} className={linkStyle}>Profile</Link>
                         <span className={linkStyle} onClick={onLogout}>Log Out</span>
                     </>:
                     <div>
