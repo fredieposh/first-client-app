@@ -14,7 +14,7 @@ function Sign() {
     return(
         <div className="flex justify-center mt-8" >
             <form   action="http://localhost:3000/login"
-                    onSubmit={(e) => handleSubmit(e, "http://localhost:3000/users", { userName, password, setResponseType, setResponseData, includeBody: false })}
+                    onSubmit={(e) => handleSubmit(e, "http://localhost:3000/users", { userName, password, setResponseType, setResponseData })}
                     method="POST" 
                     className="flex flex-col items-center md:w-[40%]">
                 {responseType && (
