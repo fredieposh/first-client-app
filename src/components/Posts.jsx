@@ -2,20 +2,17 @@ import { useState, useEffect, useRef } from "react";
 import { convertMessagesTimeFormat, isContentJson } from "../utils";
 import { generateHTML } from "@tiptap/html";
 import StarterKit from "@tiptap/starter-kit";
-import { Link, useParams, useOutletContext } from "react-router";
+import { Link, useParams, useOutletContext, useLocation } from "react-router";
 import { Editor } from "@tinymce/tinymce-react";
 import DOMPurify from "dompurify";
 
 function Posts(){
     const [posts, setPosts] = useState(null);
-    const [showCommentEditor, setShowCommentEditor] = useState(false);
-    const [showComments, setShowComments] = useState(false);
+    const [commentEditorPostId, setCommentEditorPostId] = useState(null);
+    const [showCommentsPostId, setShowCommentsPostId] = useState(null);
     const { id } = useParams();
     const { user, isAuth } = useOutletContext(); 
-
-    const toggleCommentEditor = () => {
-        setShowCommentEditor(!showCommentEditor);
-    };
+    const location = useLocation();
 
     useEffect(() => {
         async function fetchData() {
@@ -25,15 +22,13 @@ function Posts(){
             const result = await response.json();
 
             if ( result.posts ) { setPosts(result.posts) };
-            
-            // console.log(`posts: ${JSON.stringify(result.posts)}`);
         };
 
         fetchData();
-    },[showCommentEditor]);
+    },[commentEditorPostId, location.pathname]);
 
     return (
-        <div className="flex justify-center mt-8 ">
+        <div className="flex flex-col items-center gap-6 mt-8">
             {
                 posts ?
                 (
@@ -47,14 +42,13 @@ function Posts(){
                             createdAt={convertMessagesTimeFormat(post)}
                             isPublished={post.isPublished}
                             comments={post.comments}
-                            isFull={id ? true : false}
+                            isFull={!!id}
                             isAuth={isAuth}
                             userId={user?.id}
-                            toggleCommentEditor={toggleCommentEditor}
-                            setShowCommentEditor={setShowCommentEditor}
-                            showCommentEditor={showCommentEditor}
-                            showComments={showComments}
-                            setShowComments={setShowComments}
+                            commentEditorPostId={commentEditorPostId}
+                            setCommentEditorPostId={setCommentEditorPostId}
+                            showCommentsPostId={showCommentsPostId}
+                            setShowCommentsPostId={setShowCommentsPostId}
                         />):                    
                         <div>No posts to display</div>
                 ):
@@ -68,20 +62,25 @@ function Posts(){
 function Card({
     id, 
     postTitle, 
-    showComments,
-    setShowComments,
+    showCommentsPostId,
+    setShowCommentsPostId,
     postContent, 
     createdAt, 
     isPublished,
-    setShowCommentEditor,
+    setCommentEditorPostId,
     comments,
     userId=null,
     isAuth = false,
     isFull = false,
-    toggleCommentEditor,
-    showCommentEditor
+    commentEditorPostId,
 }) {
-    console.log(showCommentEditor);
+    const showCommentEditor = commentEditorPostId === id;
+    const showComments = showCommentsPostId === id;
+
+    const toggleCommentEditor = () => {
+        setCommentEditorPostId(showCommentEditor ? null : id);
+    };
+
     return (
         <div className={`flex flex-col items-left gap-3 border-1 border-slate-400 bg-slate-100 rounded-lg p-4 w-[90%] md:w-[60%] ${isFull ? 'mb-3': ''}`}>
             <div className="font-bold text-xl hover:underline"><Link to={`/post/${id}`}>{postTitle}</Link></div>
@@ -103,7 +102,7 @@ function Card({
             </div>
             <div className="flex justify-end gap-4 text-sm mt-6" >
                 <div><span className="font-bold">Posted on:</span> {createdAt}</div>
-                <div><span className={`font-bold ${comments.length > 0 ? 'hover:cursor-pointer hover:underline' : ''}`} onClick={() => setShowComments(!showComments)}>Post Comments:</span> {comments.length}</div>
+                <div><span className={`font-bold ${comments.length > 0 ? 'hover:cursor-pointer hover:underline' : ''}`} onClick={() => setShowCommentsPostId(showComments ? null : id)}>Post Comments:</span> {comments.length}</div>
                 {isFull && isAuth && <div><span className="font-bold hover:cursor-pointer hover:underline" onClick={toggleCommentEditor}>Add Comment</span></div>}
             </div>
             {showComments && (
@@ -123,7 +122,7 @@ function Card({
                 <CommentEditor 
                 postId={id}
                 userId={userId}
-                setShowCommentEditor={setShowCommentEditor}/>
+                setShowCommentEditor={() => setCommentEditorPostId(null)}/>
             )}
         </div>
     )
