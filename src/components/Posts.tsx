@@ -25,7 +25,7 @@ interface Post {
 function Posts(){
     const [posts, setPosts] = useState<Post[] | null>(null);
     const [commentEditorPostId, setCommentEditorPostId] = useState<number | null>(null);
-    const [showCommentsPostId, setShowCommentsPostId] = useState  <number | null>(null);
+    const [showCommentsPostId, setShowCommentsPostId] = useState<number | null>(null);
     const { id } = useParams();
     const { user, isAuth } = useOutletContext<{user: User | null, isAuth: boolean}>(); 
     const location = useLocation();
