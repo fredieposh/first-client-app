@@ -1,10 +1,11 @@
-import App from './App.jsx'
-import Posts from './components/Posts.jsx'
-import Sign from './components/Sign.jsx'
-import Login from './components/Login.jsx'
-import ErrorPage from './components/ErrorPage.jsx'
+import App from './App'
+import Posts from './components/Posts'
+import Sign from './components/Sign'
+import Login from './components/Login'
+import ErrorPage from './components/ErrorPage'
+import { RouteObject } from 'react-router'
 
-const routes = [
+const routes: RouteObject[] = [
     {
       path: "/",
       element: <App />,

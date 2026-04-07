@@ -1,17 +1,33 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, SetStateAction } from "react";
 import { convertMessagesTimeFormat, isContentJson } from "../utils";
 import { generateHTML } from "@tiptap/html";
 import StarterKit from "@tiptap/starter-kit";
 import { Link, useParams, useOutletContext, useLocation } from "react-router";
 import { Editor } from "@tinymce/tinymce-react";
 import DOMPurify from "dompurify";
+import { User } from "../utils";
+
+interface PostComment {
+    id: number;
+    commentContent: string;
+    createdAt: string;
+};
+
+interface Post {
+    id: number;
+    postTitle: string;
+    postContent: string;
+    createdAt: string;
+    isPublished: boolean;
+    comments: PostComment[];
+}
 
 function Posts(){
-    const [posts, setPosts] = useState(null);
-    const [commentEditorPostId, setCommentEditorPostId] = useState(null);
-    const [showCommentsPostId, setShowCommentsPostId] = useState(null);
+    const [posts, setPosts] = useState<Post[] | null>(null);
+    const [commentEditorPostId, setCommentEditorPostId] = useState<number | null>(null);
+    const [showCommentsPostId, setShowCommentsPostId] = useState  <number | null>(null);
     const { id } = useParams();
-    const { user, isAuth } = useOutletContext(); 
+    const { user, isAuth } = useOutletContext<{user: User | null, isAuth: boolean}>(); 
     const location = useLocation();
 
     useEffect(() => {
@@ -44,7 +60,7 @@ function Posts(){
                             comments={post.comments}
                             isFull={!!id}
                             isAuth={isAuth}
-                            userId={user?.id}
+                            userId={user?.id ?? null}
                             commentEditorPostId={commentEditorPostId}
                             setCommentEditorPostId={setCommentEditorPostId}
                             showCommentsPostId={showCommentsPostId}
@@ -57,6 +73,22 @@ function Posts(){
             }
         </div>
     )
+};
+
+interface PostCard {
+    id: number;
+    postTitle: string; 
+    showCommentsPostId: number | null;
+    setShowCommentsPostId: React.Dispatch<React.SetStateAction<number | null>>;
+    postContent: string;
+    createdAt: string;
+    isPublished: boolean,
+    setCommentEditorPostId: React.Dispatch<React.SetStateAction<number | null>>;
+    comments: PostComment[],
+    userId: number | null,
+    isAuth : boolean;
+    isFull : boolean;
+    commentEditorPostId: number | null;
 }
 
 function Card({
@@ -73,7 +105,7 @@ function Card({
     isAuth = false,
     isFull = false,
     commentEditorPostId,
-}) {
+}: PostCard) {
     const showCommentEditor = commentEditorPostId === id;
     const showComments = showCommentsPostId === id;
 
@@ -128,7 +160,13 @@ function Card({
     )
 }
 
-function Comment({ commentContent, createdAt, setShowCommentEditor }) {
+interface CommentProps {
+    key?: number;
+    commentContent: string;
+    createdAt: string;
+}
+
+function Comment({ commentContent, createdAt }: CommentProps) {
     return (
         <div>
             <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: commentContent }}></div>
@@ -137,8 +175,14 @@ function Comment({ commentContent, createdAt, setShowCommentEditor }) {
     )
 };
 
-function CommentEditor({ postId, userId, setShowCommentEditor }) {
-    const editorRef = useRef(null);
+interface CommentEditorProps {
+    postId: number; 
+    userId: number | null; 
+    setShowCommentEditor: React.Dispatch<SetStateAction<boolean | null>>
+}
+
+function CommentEditor({ postId, userId, setShowCommentEditor }: CommentEditorProps ) {
+    const editorRef = useRef<{getContent: () => string}>(null);
 
     const postComment = async() => {
         if (editorRef.current) {

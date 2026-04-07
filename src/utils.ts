@@ -1,11 +1,33 @@
-function handleButtonClick(event, route, navigate) {
+import { NavigateFunction } from "react-router";
+export type { User };
+
+interface User {
+    id: number;
+    userName: string;
+}
+
+function handleButtonClick(
+    event: React.MouseEvent<HTMLButtonElement>, 
+    route: string, 
+    navigate: NavigateFunction
+) {
     event.preventDefault();
     navigate(route);
 }
 
-async function handleSubmit(e, apiRoute, { userName, password, setResponseType, setResponseData, includeBody = true }) {
+async function handleSubmit<T>(
+    e:React.SubmitEvent<HTMLFormElement>, 
+    apiRoute: string, 
+    { userName, password, setResponseType, setResponseData, includeBody = true }: {
+        userName: string;
+        password: string;
+        setResponseType: React.Dispatch<React.SetStateAction<number | null>>;
+        setResponseData: React.Dispatch<React.SetStateAction<T>>
+        includeBody?: boolean;
+    }
+) {
     e.preventDefault();
-    const fetchOptions = {
+    const fetchOptions:RequestInit = {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -21,7 +43,7 @@ async function handleSubmit(e, apiRoute, { userName, password, setResponseType, 
     setResponseData(result);
 }
 
-function convertMessagesTimeFormat(post) {
+function convertMessagesTimeFormat(post: { createdAt: string } ) {
     const rawDate = new Date(post?.createdAt);
     const formattedDate = new Intl.DateTimeFormat("en-GB", {
         hour: "2-digit",
@@ -36,7 +58,11 @@ function convertMessagesTimeFormat(post) {
     return formattedDate;
 }
 
-async function handleLogout({ setUser, setIsAuth, navigate }) {
+async function handleLogout({ setUser, setIsAuth, navigate }: {
+    setUser:    React.Dispatch<React.SetStateAction<User | null>>;
+    setIsAuth:  React.Dispatch<React.SetStateAction<boolean>>;
+    navigate:   NavigateFunction;    
+}) {
     setUser(null);
     setIsAuth(false);
     localStorage.removeItem("token");
@@ -50,7 +76,13 @@ async function handleLogout({ setUser, setIsAuth, navigate }) {
     navigate("/");
 }
 
-function handleResponse({ result, setIsAuth, setUser, user, isAuth }) {
+function handleResponse({ result, setIsAuth, setUser, user, isAuth }: {
+    result: { isAuth: boolean; user?: User };
+    setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
+    user: User | null;
+    isAuth: boolean;    
+}) {
     if (result.isAuth && !isAuth) {
         setIsAuth(true);
     }
@@ -66,13 +98,14 @@ function handleResponse({ result, setIsAuth, setUser, user, isAuth }) {
 
 };
 
-function isContentJson(content) {
+function isContentJson(content: string):object | false {
     try {
         const parsed = JSON.parse(content);
         if (parsed?.type === "doc") return parsed;
     } catch {
         return false;
     }
+    return false;
 }
 
 export { handleButtonClick, handleSubmit, convertMessagesTimeFormat, handleResponse, handleLogout, isContentJson };

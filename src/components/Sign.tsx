@@ -1,13 +1,23 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
-import { handleButtonClick, handleSubmit } from "../utils.jsx"
+import { handleButtonClick, handleSubmit } from "../utils"
+
+interface ErrorProps {
+    error: {msg: string};
+}
 
 function Sign() {
     const navigate = useNavigate();
     const [userName, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [responseType, setResponseType] = useState(null);
-    const [responseData, setResponseData] = useState(null);
+    const [responseType, setResponseType] = useState<number | null>(null);
+    const [responseData, setResponseData] = useState< {msg: string}[] | null>(null);
+
+    useEffect(() => {
+        if(responseType && responseType < 400) {
+            navigate("/", {state: {message: "Sign up successful!"}});
+        }
+    }, [responseType])
     
     const buttonClassName = "border-1 bg-slate-900 text-white border-slate-400 rounded-lg px-4 py-1 hover:bg-white hover:text-slate-900 hover:cursor-pointer transition-all duration-600";
 
@@ -17,16 +27,14 @@ function Sign() {
                     onSubmit={(e) => handleSubmit(e, "http://localhost:3000/users", { userName, password, setResponseType, setResponseData })}
                     method="POST" 
                     className="flex flex-col items-center md:w-[40%]">
-                {responseType && (
-                    responseType >= 400 ?
+                {(responseType != null && responseType >= 400) && (
                     <div className="mb-6">
                         <ul className="flex flex-col gap-2 items-center">
-                            {responseData.map((error, index) => {
+                            {responseData?.map((error, index) => {
                                 return <li key={index} className="bg-red-200 text-red-800 px-3 py-1 rounded-lg"><Error error={error}/></li>
                             })}
                         </ul>
-                    </div> :
-                    navigate("/", {state: {message: "Sign up successful!"}})
+                    </div>
                 )}
                 <div className="flex justify-center w-full"><h3 className="font-bold text-2xl text-center" >Sign Up</h3></div>
                 <div className="mt-10 flex w-[100%]  justify-center">
@@ -38,7 +46,7 @@ function Sign() {
                         name="username"
                         value={userName}
                         onChange={(e) => setUsername(e.target.value)}
-                        autoFocus="true"
+                        autoFocus={true}
                     />
                 </div>
                 <div className="mt-10 flex w-[100%] justify-center">
@@ -68,7 +76,7 @@ function Sign() {
     )
 };
 
-function Error({ error }) {
+function Error({ error }: ErrorProps) {
     return (
         <>
             {error.msg}

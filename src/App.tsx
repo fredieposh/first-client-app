@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router'
-import Navbar from './components/Navbar.jsx'
-import { handleResponse, handleLogout } from './utils.jsx'
+import Navbar from './components/Navbar'
+import { handleResponse, handleLogout } from './utils'
+import { User } from './utils';
 
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isAuth, setIsAuth] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
