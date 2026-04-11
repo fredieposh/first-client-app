@@ -2,6 +2,7 @@ import { Error } from "./Sign";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { handleButtonClick, handleSubmit } from "../utils";
+import { API_URL } from "../config";
 
 function Login() {
     const navigate = useNavigate();
@@ -19,8 +20,8 @@ function Login() {
     }, [responseData, responseType]);
     return(
         <div className="flex justify-center mt-8" >
-            <form   action="http://localhost:3000/login"
-                    onSubmit={(e) => handleSubmit(e, "http://localhost:3000/login", { userName, password, setResponseType, setResponseData })}
+            <form   action={`${API_URL}/login`}
+                    onSubmit={(e) => handleSubmit(e, `${API_URL}/login`, { userName, password, setResponseType, setResponseData })}
                     method="POST" 
                     className="flex flex-col items-center md:w-[40%]">
                 {(responseType != null &&  responseType >= 400) && (

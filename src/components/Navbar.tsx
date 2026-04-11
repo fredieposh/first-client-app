@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { User } from '../utils';
+import { PROFILE_APP_URL } from '../config';
 
 interface NavbarProps {
     isAuth: boolean;
@@ -16,7 +17,7 @@ function Navbar({ isAuth, onLogout, user }: NavbarProps) {
             <div className="flex gap-3 text-md">
                 {isAuth ?
                     <>
-                        <Link to={`http://localhost:5174/users/${user!.id}/posts`} className={linkStyle}>Profile</Link>
+                        <Link to={`${PROFILE_APP_URL}/users/${user!.id}/posts`} className={linkStyle}>Profile</Link>
                         <span className={linkStyle} onClick={onLogout}>Log Out</span>
                     </>:
                     <div>

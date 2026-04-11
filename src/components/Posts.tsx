@@ -6,6 +6,7 @@ import { Link, useParams, useOutletContext, useLocation } from "react-router";
 import { Editor } from "@tinymce/tinymce-react";
 import DOMPurify from "dompurify";
 import { User } from "../utils";
+import { API_URL } from "../config";
 
 interface PostComment {
     id: number;
@@ -33,8 +34,8 @@ function Posts(){
     useEffect(() => {
         async function fetchData() {
             const response = id ? 
-                await fetch(`http://localhost:3000/posts/${id}`, {credentials: 'include'}) :
-                await fetch("http://localhost:3000/posts", { credentials: 'include'});
+                await fetch(`${API_URL}/posts/${id}`, {credentials: 'include'}) :
+                await fetch(`${API_URL}/posts`, { credentials: 'include'});
             const result = await response.json();
 
             if ( result.posts ) { setPosts(result.posts) };
@@ -190,7 +191,7 @@ function CommentEditor({ postId, userId, setShowCommentEditor }: CommentEditorPr
             if (!comment) {
                 return;
             }
-            const response = await fetch(`http://localhost:3000/users/${userId}/posts/${postId}`, {
+            const response = await fetch(`${API_URL}/users/${userId}/posts/${postId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

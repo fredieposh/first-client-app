@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 import Navbar from './components/Navbar'
+import { API_URL } from './config'
 import { handleResponse, handleLogout } from './utils'
 import { User } from './utils';
 
@@ -23,7 +24,7 @@ function App() {
     }
 
     async function fetchData() {
-      const response = await fetch("http://localhost:3000/users", {
+      const response = await fetch(`${API_URL}/users`, {
         headers: {
           "Content-Type": "application/json",
           "authorization": `Bearer ${localStorage?.token}`

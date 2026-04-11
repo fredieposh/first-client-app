@@ -1,4 +1,5 @@
 import { NavigateFunction } from "react-router";
+import { API_URL } from "./config";
 export type { User };
 
 interface User {
@@ -67,7 +68,7 @@ async function handleLogout({ setUser, setIsAuth, navigate }: {
     setIsAuth(false);
     localStorage.removeItem("token");
     
-    const logoutResult = await fetch('http://localhost:3000/logout', { 
+    const logoutResult = await fetch(`${API_URL}/logout`, { 
         method: 'POST',
         credentials: 'include',
     });
