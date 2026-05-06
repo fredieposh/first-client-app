@@ -14,15 +14,6 @@ function App() {
   const onLogout = () => handleLogout({ setUser, setIsAuth, navigate });
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('logout') === 'true') {
-      localStorage.removeItem('token');
-      setIsAuth(false);
-      setUser(null);
-      window.history.replaceState({}, '', '/');
-      return;
-    }
-
     async function fetchData() {
       const response = await fetch(`${API_URL}/users`, {
         headers: {

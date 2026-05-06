@@ -42,7 +42,7 @@ function Posts(){
         };
 
         fetchData();
-    },[commentEditorPostId, location.pathname]);
+    },[commentEditorPostId, location.pathname,]);
 
     return (
         <div className="flex flex-col items-center gap-6 mt-8">
@@ -99,7 +99,6 @@ function Card({
     setShowCommentsPostId,
     postContent, 
     createdAt, 
-    isPublished,
     setCommentEditorPostId,
     comments,
     userId=null,
